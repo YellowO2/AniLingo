@@ -1,137 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import Live2DViewer from "./Live2DViewer.tsx";
 import SignupModal from "./components/SignupModal/SignupModal.tsx";
+import OnboardingService, { 
+  OnboardingStage, 
+  UserPreferences, 
+  ChatMessage 
+} from "./components/OnboardingService.ts";
 import "./App.css";
-
-// Define the stages of onboarding
-type OnboardingStage = 
-  | "welcome" 
-  | "askLevel" 
-  | "processLevel" 
-  | "askFocus" 
-  | "processFocus" 
-  | "suggestSignup" 
-  | "complete";
-
-// Define user preferences
-interface UserPreferences {
-  level: "beginner" | "intermediate" | "advanced" | null;
-  focus: "daily" | "anime" | "travel" | "business" | null;
-}
-
-// Mock API service - enhanced with onboarding responses
-const mockApiService = {
-  async getAiResponse(userMessage: string, onboardingStage: OnboardingStage, setOnboardingStage: React.Dispatch<React.SetStateAction<OnboardingStage>>, userPreferences: UserPreferences, setUserPreferences: React.Dispatch<React.SetStateAction<UserPreferences>>) {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Handle different onboarding stages
-    if (onboardingStage === "welcome") {
-      setOnboardingStage("askLevel");
-      return "Great! To personalize your experience, I'll need to know a few things about you. What's your Japanese level? (Beginner/Intermediate/Advanced)";
-    }
-    
-    if (onboardingStage === "askLevel") {
-      // Process user's language level response
-      const lowerMsg = userMessage.toLowerCase();
-      
-      if (lowerMsg.includes("beginner") || lowerMsg.includes("n5") || lowerMsg.includes("n4")) {
-        setUserPreferences({...userPreferences, level: "beginner"});
-        setOnboardingStage("processLevel");
-        return "Beginner level is perfect! Everyone starts somewhere, and I'll make sure to explain things clearly. 初心者、大丈夫ですよ！(It's okay to be a beginner!)";
-      } 
-      else if (lowerMsg.includes("intermediate") || lowerMsg.includes("n3")) {
-        setUserPreferences({...userPreferences, level: "intermediate"});
-        setOnboardingStage("processLevel");
-        return "Intermediate level is great! You probably know some basics already. 中級レベルですね！頑張りましょう！(Let's do our best at the intermediate level!)";
-      }
-      else if (lowerMsg.includes("advanced") || lowerMsg.includes("n2") || lowerMsg.includes("n1")) {
-        setUserPreferences({...userPreferences, level: "advanced"});
-        setOnboardingStage("processLevel");
-        return "Advanced level! I'm impressed! 上級レベルですね！素晴らしい！(Advanced level! Wonderful!)";
-      } 
-      else {
-        // If we couldn't determine the level, ask again
-        return "すみません (Sorry), I didn't catch that. Are you a Beginner, Intermediate, or Advanced Japanese learner?";
-      }
-    }
-    
-    if (onboardingStage === "processLevel") {
-      setOnboardingStage("askFocus");
-      return "What would you like to focus on learning? (Daily Conversation/Anime & Manga/Travel/Business)";
-    }
-    
-    if (onboardingStage === "askFocus") {
-      // Process user's focus area response
-      const lowerMsg = userMessage.toLowerCase();
-      
-      if (lowerMsg.includes("daily") || lowerMsg.includes("conversation") || lowerMsg.includes("everyday")) {
-        setUserPreferences({...userPreferences, focus: "daily"});
-        setOnboardingStage("processFocus");
-        return "Daily conversation is a great choice! We'll practice useful phrases for everyday situations. 日常会話を練習しましょう！(Let's practice daily conversation!)";
-      } 
-      else if (lowerMsg.includes("anime") || lowerMsg.includes("manga")) {
-        setUserPreferences({...userPreferences, focus: "anime"});
-        setOnboardingStage("processFocus");
-        return "Anime & Manga vocabulary! Fun choice! アニメの日本語を勉強しましょう！(Let's study Japanese from anime!)";
-      }
-      else if (lowerMsg.includes("travel") || lowerMsg.includes("tourism")) {
-        setUserPreferences({...userPreferences, focus: "travel"});
-        setOnboardingStage("processFocus");
-        return "Travel Japanese is very practical! 旅行の日本語ですね！役に立ちますよ！(Travel Japanese! It will be useful!)";
-      }
-      else if (lowerMsg.includes("business") || lowerMsg.includes("work") || lowerMsg.includes("professional")) {
-        setUserPreferences({...userPreferences, focus: "business"});
-        setOnboardingStage("processFocus");
-        return "Business Japanese! Very professional of you! ビジネス日本語を勉強しましょう！(Let's study business Japanese!)";
-      }
-      else {
-        // If we couldn't determine the focus, ask again
-        return "すみません (Sorry), I didn't understand your preference. Would you like to focus on Daily Conversation, Anime & Manga, Travel, or Business Japanese?";
-      }
-    }
-    
-    if (onboardingStage === "processFocus") {
-      setOnboardingStage("suggestSignup");
-      return "Perfect! I've customized your learning experience based on your preferences. Would you like to save your progress by creating an account?";
-    }
-    
-    if (onboardingStage === "suggestSignup") {
-      // Any response here will complete the onboarding
-      setOnboardingStage("complete");
-      return "Great! Let's start learning Japanese together! Try typing a greeting like 'こんにちは' (hello) or ask me how to say something in Japanese!";
-    }
-    
-    // For completed onboarding or general conversation
-    if (onboardingStage === "complete") {
-      // Regular responses for after onboarding
-      const responses = [
-        "なるほど！それは面白いですね。(I see! That's interesting.)",
-        "もう少し詳しく教えてください。(Please tell me more details.)",
-        `そうですか！日本語で言えば「素晴らしい」です！(I see! In Japanese, you'd say "subarashii"!)`,
-        "それについて、もっと話しましょう！(Let's talk more about that!)",
-        "はい、分かりました。次に何をしますか？(Yes, I understand. What would you like to do next?)",
-        "日本語の練習、頑張っていますね！(You're working hard on your Japanese practice!)",
-      ];
-      
-      // Choose a random response after onboarding is complete
-      return responses[Math.floor(Math.random() * responses.length)];
-    }
-    
-    // Fallback response
-    return "すみません, I didn't understand. Could you try asking something else?";
-  }
-};
 
 function App() {
   // Message state
-  const [messages, setMessages] = useState<Array<{
-    text: string;
-    sender: "user" | "ai";
-    timestamp: Date;
-  }>>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      text: "こんにちは! Welcome to AniLingo! I'm Hiyori, your personal Japanese tutor. I can help you practice Japanese through conversation. Would you like to get started?",
+      text: "こんにちは! Welcome to AniLingo! I'm Hiyori, your personal Japanese tutor. I can help you practice Japanese through conversation. Let's start learning!",
       sender: "ai",
       timestamp: new Date(),
     },
@@ -149,6 +30,33 @@ function App() {
     focus: null
   });
   const [showSignupModal, setShowSignupModal] = useState(false);
+  
+  // Create an onboarding service instance
+  const onboardingServiceRef = useRef<OnboardingService | null>(null);
+  
+  // Initialize onboarding service only once
+  useEffect(() => {
+    const addMessage = (message: ChatMessage) => {
+      setMessages(prevMessages => [...prevMessages, message]);
+    };
+    
+    onboardingServiceRef.current = new OnboardingService(
+      onboardingStage,
+      setOnboardingStage,
+      userPreferences,
+      setUserPreferences,
+      addMessage,
+      1500 // Auto-response delay in ms
+    );
+  }, []);
+  
+  // Keep onboarding service in sync with React state
+  useEffect(() => {
+    if (onboardingServiceRef.current) {
+      onboardingServiceRef.current.updateStage(onboardingStage);
+      onboardingServiceRef.current.updatePreferences(userPreferences);
+    }
+  }, [onboardingStage, userPreferences]);
   
   // Show signup modal when we reach that stage
   useEffect(() => {
@@ -189,24 +97,20 @@ function App() {
     setIsLoading(true);
     
     try {
-      // Get AI response from mock API with onboarding context
-      const aiResponse = await mockApiService.getAiResponse(
-        userMessage, 
-        onboardingStage, 
-        setOnboardingStage,
-        userPreferences,
-        setUserPreferences
-      );
+      // Get AI response from onboarding service
+      const aiResponse = await onboardingServiceRef.current?.processUserMessage(userMessage);
       
-      // Add AI response
-      setMessages(prevMessages => [
-        ...prevMessages,
-        {
-          text: aiResponse,
-          sender: "ai",
-          timestamp: new Date(),
-        },
-      ]);
+      if (aiResponse) {
+        // Add AI response
+        setMessages(prevMessages => [
+          ...prevMessages,
+          {
+            text: aiResponse,
+            sender: "ai",
+            timestamp: new Date(),
+          },
+        ]);
+      }
     } catch (error) {
       console.error("Error getting AI response:", error);
       
@@ -241,13 +145,18 @@ function App() {
     ]);
   };
   
+  // Get current emotion for Live2D model
+  const getCurrentEmotion = () => {
+    return onboardingServiceRef.current?.getEmotion();
+  };
+  
   return (
     <div className="app-container">
       <div className="main-content">
         <div className="live2d-section">
           <Live2DViewer 
-          // emotion={onboardingStage === "welcome" ? "happy" : undefined}
-           />
+          // emotion={getCurrentEmotion()} 
+          />
         </div>
         
         <div className="chat-section">
