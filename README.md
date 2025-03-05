@@ -28,7 +28,8 @@ With the help of Gen AI, it allows us to have:
 - **Node.js**
 
 ### Running the Development Server
-Nothing at backend at this point so just go to frontend with cd
+
+#### Frontend
 
 ```bash
 cd front-end
@@ -39,6 +40,24 @@ To start the development server, run:
 ```bash
 npm run dev
 ```
+
+#### Backend
+
+```bash
+# Create a virtual environment (optional but recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run with uvicorn
+uvicorn main:app --reload
+```
+API Endpoints:
+POST /generate-lesson: Generate a personalized lesson
+POST /grammar-explanation: Get grammar explanations
+GET /: Health check endpoint
 
 ## Tech Stack
 
