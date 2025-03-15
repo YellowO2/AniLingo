@@ -1,0 +1,73 @@
+{
+    "lesson_title": "Lesson: Ordering Food",
+    "lesson_content": [
+        {
+            "question_number": 1,
+            "question_text": "レストランで、「おすすめは_____ですか？」と聞きます。",
+            "choices": [
+                "A. 何",
+                "B. 誰",
+                "C. いつ",
+                "D. どこ"
+            ],
+            "answer": 0,
+            "explanation": "「何」 (nani) means 'what', so you're asking 'What is your recommendation?'"
+        },
+        {
+            "question_number": 2,
+            "question_text": "カレーライスを_____つください。",
+            "choices": [
+                "A. 一",
+                "B. 二",
+                "C. 三",
+                "D. どれ"
+            ],
+            "answer": 0,
+            "explanation": "「一つ」 (hitotsu) means 'one'. You are asking for one order of curry rice."
+        },
+        {
+            "question_number": 3,
+            "question_text": "店員さんに「_____ですか？」と聞かれた ら、店内か持ち帰りか答えます。",
+            "choices": [
+                "A. どこ",
+                "B. こちら",
+                "C. いかが",
+                "D. 何"
+            ],
+            "answer": 2,
+            "explanation": "「いかがですか？」(ikaga desu ka?) means 'How is it?' or in this case, 'For here or to go?' (店内 or 持ち帰り)"
+        },
+        {
+            "question_number": 4,
+            "question_text": "注文が終わったら、「_____お願いします。」と言います。",
+            "choices": [
+                "A. ありがとう",
+                "B. ごちそうさ ま",
+                "C. すみません",
+                "D. チェック"
+            ],
+            "answer": 3,
+            "explanation": "「チェックお願いします」(chekku onegaishimasu) means 'Check, please.' You are asking for the bill."
+        },
+        {
+            "question_number": 5,
+            "question_text": "ラーメン_____ください。",
+            "choices": [
+                "A. に",
+                "B. を",
+                "C. は",
+                "D. が"
+            ],
+            "answer": 1,
+            "explanation": "「を」(o) is used to mark the direct object of the verb. You want to order ramen."
+        }
+    ],
+    "audio_files": [
+        "tts_outputs\\1.mp3",
+        "tts_outputs\\2.mp3",
+        "tts_outputs\\3.mp3",
+        "tts_outputs\\4.mp3",
+        "tts_outputs\\5.mp3"
+    ],
+    "difficulty_level": "Beginner"
+}

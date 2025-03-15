@@ -3,3 +3,4 @@ uvicorn
 openai
 python-dotenv
 google-generativeai
+fish_audio_sdk

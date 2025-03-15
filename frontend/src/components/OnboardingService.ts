@@ -1,4 +1,3 @@
-// OnboardingService.ts
 import { Dispatch, SetStateAction } from "react";
 
 // Define the stages of onboarding
@@ -17,20 +16,13 @@ export interface UserPreferences {
   focus: "daily" | "anime" | "travel" | "business" | null;
 }
 
-// Interface for chat messages
-export interface ChatMessage {
-  text: string;
-  sender: "user" | "ai";
-  timestamp: Date;
-}
-
 // Type for the message handler function
-type AddMessageFunction = (message: ChatMessage) => void;
+type AddMessageFunction = (text: string) => void;
 
 class OnboardingService {
   private setStage: Dispatch<SetStateAction<OnboardingStage>>;
   private setPreferences: Dispatch<SetStateAction<UserPreferences>>;
-  private addMessage: AddMessageFunction;
+  private addAIMessage: AddMessageFunction;
   private autoResponseDelay: number;
 
   constructor(
@@ -38,12 +30,12 @@ class OnboardingService {
     setStage: Dispatch<SetStateAction<OnboardingStage>>,
     private preferences: UserPreferences,
     setPreferences: Dispatch<SetStateAction<UserPreferences>>,
-    addMessage: AddMessageFunction,
+    addAIMessage: AddMessageFunction,
     autoResponseDelay = 1500
   ) {
     this.setStage = setStage;
     this.setPreferences = setPreferences;
-    this.addMessage = addMessage;
+    this.addAIMessage = addAIMessage;
     this.autoResponseDelay = autoResponseDelay;
   }
 
@@ -63,8 +55,6 @@ class OnboardingService {
     await new Promise(resolve => setTimeout(resolve, 800));
     
     switch(this.stage) {
-      case "welcome":
-        return this.handleWelcomeStage();
       
       case "askLevel":
         return this.handleAskLevelStage(userMessage);
@@ -81,18 +71,9 @@ class OnboardingService {
       case "suggestSignup":
         return this.handleSuggestSignupStage();
       
-      case "complete":
-        return this.handleCompletedOnboarding(userMessage);
-      
       default:
         return "すみません, I didn't understand. Could you try asking something else?";
     }
-  }
-
-  // Handle welcome stage
-  private handleWelcomeStage(): string {
-    this.setStage("askLevel");
-    return "Great! To personalize your experience, I'll need to know a few things about you. What's your Japanese level? (Beginner/Intermediate/Advanced)";
   }
 
   // Handle ask level stage
@@ -192,34 +173,7 @@ class OnboardingService {
   // Handle suggest signup stage
   private handleSuggestSignupStage(): string {
     this.setStage("complete");
-    return "Great! Let's start learning Japanese together! Try typing a greeting like 'こんにちは' (hello) or ask me how to say something in Japanese!";
-  }
-
-  // Handle completed onboarding
-  private handleCompletedOnboarding(userMessage: string): string {
-    // Basic language pattern recognition
-    const lowerMsg = userMessage.toLowerCase();
-    
-    if (lowerMsg.includes("hello") || lowerMsg.includes("hi") || lowerMsg.includes("こんにちは")) {
-      return "こんにちは！(Hello!) Great job with the greeting! How are you today? In Japanese, you can ask 'お元気ですか？' (Ogenki desu ka?)";
-    }
-    
-    if (lowerMsg.includes("how do you say") || lowerMsg.includes("how to say")) {
-      return "To say that in Japanese, you would use... (I'd need the specific phrase to translate, but I'm simulating a response here)";
-    }
-    
-    // Regular responses for after onboarding
-    const responses = [
-      "なるほど！それは面白いですね。(I see! That's interesting.)",
-      "もう少し詳しく教えてください。(Please tell me more details.)",
-      `そうですか！日本語で言えば「素晴らしい」です！(I see! In Japanese, you'd say "subarashii"!)`,
-      "それについて、もっと話しましょう！(Let's talk more about that!)",
-      "はい、分かりました。次に何をしますか？(Yes, I understand. What would you like to do next?)",
-      "日本語の練習、頑張っていますね！(You're working hard on your Japanese practice!)",
-    ];
-    
-    // Choose a random response
-    return responses[Math.floor(Math.random() * responses.length)];
+    return "Great! Let's start learning Japanese together!";
   }
 
   // New method to schedule the next message independent of stage changes
@@ -235,11 +189,7 @@ class OnboardingService {
       }
       
       if (response) {
-        this.addMessage({
-          text: response,
-          sender: "ai",
-          timestamp: new Date()
-        });
+        this.addAIMessage(response);
       }
     }, this.autoResponseDelay);
   }

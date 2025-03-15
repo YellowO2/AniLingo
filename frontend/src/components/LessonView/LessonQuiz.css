@@ -1,0 +1,208 @@
+.lesson-quiz {
+  background: linear-gradient(135deg, rgba(255, 240, 245, 0.9), rgba(255, 228, 232, 0.9));
+  backdrop-filter: blur(5px);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  border: 2px solid rgba(255, 182, 193, 0.7); /* Light pink border */
+}
+
+.lesson-header {
+  background: linear-gradient(135deg, rgba(255, 192, 203, 0.95), rgba(255, 160, 176, 0.95));
+  color: white;
+  padding: 12px;
+  text-align: center;
+  /* border-bottom-left-radius: 16px;*/
+  /* border-bottom-right-radius: 3px;  */
+}
+
+.lesson-header h2 {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+}
+
+.lesson-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.progress-text {
+  text-align: right;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.progress-bar {
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #ff99aa, #ffccd5);
+  transition: width 0.3s ease;
+}
+
+.question-container {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.question-text {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 8px;
+  color: #444;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.choices-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-button {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: 2px solid rgba(255, 182, 193, 0.7);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.choice-button:hover:not(:disabled) {
+  border-color: rgba(255, 160, 176, 0.9);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.choice-label {
+  background: rgba(255, 228, 232, 0.9);
+  padding: 12px;
+  font-weight: bold;
+  color: #555;
+  min-width: 45px;
+  text-align: center;
+  border-right: 2px solid rgba(255, 182, 193, 0.8);
+}
+
+.choice-text {
+  padding: 12px;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.choice-button.correct {
+  border-color: #a3d977;
+  background: rgba(230, 255, 230, 0.9);
+}
+
+.choice-button.correct .choice-label {
+  background-color: #a3d977;
+  color: white;
+  border-color: #a3d977;
+}
+
+.choice-button.incorrect {
+  border-color: #ff6b6b;
+  background: rgba(255, 220, 220, 0.9);
+}
+
+.choice-button.incorrect .choice-label {
+  background-color: #ff6b6b;
+  color: white;
+  border-color: #ff6b6b;
+}
+
+.explanation {
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.correct-explanation {
+  border: 2px solid #a3d977;
+}
+
+.incorrect-explanation {
+  border: 2px solid #ff6b6b;
+}
+
+.explanation-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.explanation-text {
+  font-size: 0.9rem;
+}
+
+.next-button {
+  background: linear-gradient(135deg, #ff99aa, #ffccd5);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 8px;
+  box-shadow: 0 4px 0 rgba(255, 160, 176, 0.8);
+}
+
+.next-button:hover {
+  background: linear-gradient(135deg, #ff7a92, #ffb7c5);
+}
+
+.floating-score {
+  position: absolute;
+  top: -20px;
+  right: 20px;
+  background: #ffc0cb;
+  color: #7d4b5e;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  z-index: 25;
+}
+
+.lesson-loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: #777;
+}
+
+.character-subtitle {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  max-width: 80%;
+  text-align: center;
+  z-index: 100;
+  font-size: 1.1rem;
+}
