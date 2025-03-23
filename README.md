@@ -48,7 +48,3 @@ uvicorn main:app --reload
 - **`POST /generate-lesson-new`** - Generate personalized lesson with audio files from tts
 - **`POST /grammar-explanation`** - Provide grammar explanations
 - **`GET /`** - Health check
-
-## Contribution
-
-Contributions are welcome!
